@@ -1,7 +1,6 @@
 package com.breaktome;
 
 import com.breaktome.game.network.client.PlayerClient;
-import com.jme3.app.SimpleApplication;
 
 /**
  * Gameplay client featuring single player and multiplayer functionality
@@ -11,12 +10,17 @@ import com.jme3.app.SimpleApplication;
  * Multiplayer:
  *   - Client connects to a dedicated instance of a BreaktomeServer
  */
-public class BreaktomeClient extends SimpleApplication {
+public class BreaktomeClient extends Breaktome {
 
     private PlayerClient playerClient;
 
     @Override
-    public void simpleInitApp() {
+    boolean isServer() {
+        return false;
+    }
+
+    @Override
+    public void onBoot() throws Exception {
         playerClient = new PlayerClient("127.0.0.1", 4242);
         playerClient.start();
     }
@@ -26,6 +30,4 @@ public class BreaktomeClient extends SimpleApplication {
         playerClient.destroy();
         super.destroy();
     }
-
-
 }

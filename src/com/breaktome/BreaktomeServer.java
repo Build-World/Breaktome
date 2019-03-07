@@ -1,20 +1,28 @@
 package com.breaktome;
 
 import com.breaktome.game.network.server.GameServer;
-import com.jme3.app.SimpleApplication;
 
-public class BreaktomeServer extends SimpleApplication {
+public class BreaktomeServer extends Breaktome {
 
     private GameServer gameServer;
 
+    public BreaktomeServer() {
+        setName("Breaktome Server");
+    }
+
     @Override
-    public void simpleInitApp() {
+    boolean isServer() {
+        return true;
+    }
+
+    @Override
+    public void onBoot() throws Exception {
         gameServer = new GameServer(4242);
         gameServer.start();
     }
 
     @Override
-    public void simpleUpdate(float tpf) {
+    public void onUpdate(float tpf) throws Exception {
         //System.out.println(gameServer.getServer().getConnections().size());
     }
 
