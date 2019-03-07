@@ -7,7 +7,7 @@ import com.jme3.network.Server;
 
 import java.util.Set;
 
-public class Sender {
+public class ServerSender {
 
     /**
      * Static Aliases
@@ -42,35 +42,35 @@ public class Sender {
      */
     private Server server;
 
-    public Sender(Server server) {
+    public ServerSender(Server server) {
         this.server = server;
     }
 
-    public Sender broadcast(Message message)
+    public ServerSender broadcast(Message message)
     {
         server.broadcast(message);
         return this;
     }
 
-    public Sender send(HostedConnection connection, Message message)
+    public ServerSender send(HostedConnection connection, Message message)
     {
         server.broadcast(Filters.in(connection), message);
         return this;
     }
 
-    public Sender send(Set<HostedConnection> connections, Message message)
+    public ServerSender send(Set<HostedConnection> connections, Message message)
     {
         server.broadcast(Filters.in(connections), message);
         return this;
     }
 
-    public Sender broadcastExceptTo(HostedConnection connection, Message message)
+    public ServerSender broadcastExceptTo(HostedConnection connection, Message message)
     {
         server.broadcast(Filters.notIn(connection), message);
         return this;
     }
 
-    public Sender broadcastExceptTo(Set<HostedConnection> connections, Message message)
+    public ServerSender broadcastExceptTo(Set<HostedConnection> connections, Message message)
     {
         server.broadcast(Filters.notIn(connections), message);
         return this;
@@ -81,25 +81,25 @@ public class Sender {
      */
     private Set<HostedConnection> clients;
 
-    public Sender addClient(HostedConnection connection)
+    public ServerSender addClient(HostedConnection connection)
     {
         clients.add(connection);
         return this;
     }
 
-    public Sender addClient(Set<HostedConnection> connections)
+    public ServerSender addClient(Set<HostedConnection> connections)
     {
         clients.addAll(connections);
         return this;
     }
 
-    public Sender send(Message message)
+    public ServerSender send(Message message)
     {
         server.broadcast(Filters.in(clients), message);
         return this;
     }
 
-    public Sender broadcastExceptTo(Message message)
+    public ServerSender broadcastExceptTo(Message message)
     {
         server.broadcast(Filters.in(clients), message);
         return this;

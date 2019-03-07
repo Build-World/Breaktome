@@ -1,7 +1,7 @@
 package com.breaktome.game.network.server.listeners;
 
 import com.breaktome.game.network.messages.PlayersMessage;
-import com.breaktome.game.network.server.Sender;
+import com.breaktome.game.network.server.ServerSender;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Server;
 
@@ -18,7 +18,7 @@ public class ConnectionListener implements com.jme3.network.ConnectionListener {
         {
             connections.add(connection.getAddress());
         }
-        Sender.broadcast(server, new PlayersMessage(connections));
+        ServerSender.broadcast(server, new PlayersMessage(connections));
     }
 
     @Override
@@ -29,6 +29,6 @@ public class ConnectionListener implements com.jme3.network.ConnectionListener {
         {
             connections.add(connection.getAddress());
         }
-        Sender.broadcast(server, new PlayersMessage(connections));
+        ServerSender.broadcast(server, new PlayersMessage(connections));
     }
 }
