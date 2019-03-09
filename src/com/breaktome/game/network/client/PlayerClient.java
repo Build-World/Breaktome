@@ -1,6 +1,7 @@
 package com.breaktome.game.network.client;
 
 import com.breaktome.Breaktome;
+import com.breaktome.BreaktomeClient;
 import com.breaktome.game.blocks.BlockLoader;
 import com.breaktome.game.blocks.BlockRegistry;
 import com.breaktome.game.network.INetworkNode;
@@ -13,7 +14,6 @@ import com.breaktome.game.network.messages.ChunkMessage;
 import com.breaktome.game.network.messages.PlayersMessage;
 import com.jme3.network.Client;
 import com.jme3.network.Network;
-import com.jme3.network.serializing.Serializer;
 
 import java.io.IOException;
 
@@ -40,8 +40,8 @@ public class PlayerClient implements INetworkNode {
             client.addClientStateListener(new ClientStateListener());
 
             client.addMessageListener(new PlayersListener(), PlayersMessage.class);
-            client.addMessageListener(new BlockRegistryListener(app.getRegistries()), BlockRegistryMessage.class);
-            client.addMessageListener(new ChunkListener(), ChunkMessage.class);
+            client.addMessageListener(new BlockRegistryListener((BreaktomeClient)app), BlockRegistryMessage.class);
+            client.addMessageListener(new ChunkListener((BreaktomeClient)app), ChunkMessage.class);
 
             client.start();
         } catch (IOException e) {

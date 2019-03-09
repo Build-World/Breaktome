@@ -38,14 +38,14 @@ public class AdvancedChunk implements IRepresentation {
             return;
         }
 
-        float weight = 2;
+        float weight = 12;
         for (int i = 0; i < Chunk.size; i++) {
             for (int j = 0; j < Chunk.size; j++) {
                 for (int k = 0; k < Chunk.size; k++) {
                     int rand = ThreadLocalRandom.current().nextInt(0, (int)(blockRegistry.getSize() * weight));
-                    if(blockRegistry.getSize() > rand)
+                    if(true || blockRegistry.getSize() > rand)
                     {
-                        chunk.setBlock(i,j,k,rand);
+                        chunk.setBlock(i,j,k,1);
                     }
                 }
             }

@@ -1,17 +1,17 @@
 package com.breaktome.game.network.client.listeners.messages;
 
+import com.breaktome.BreaktomeClient;
 import com.breaktome.game.network.messages.BlockRegistryMessage;
-import com.breaktome.game.registries.Registries;
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 
 public class BlockRegistryListener implements MessageListener<Client> {
 
-    private Registries registries;
+    private BreaktomeClient breaktome;
 
-    public BlockRegistryListener(Registries registries) {
-        this.registries = registries;
+    public BlockRegistryListener(BreaktomeClient breaktome) {
+        this.breaktome = breaktome;
     }
 
     @Override
@@ -19,8 +19,8 @@ public class BlockRegistryListener implements MessageListener<Client> {
         if(message instanceof BlockRegistryMessage)
         {
             BlockRegistryMessage blockRegistryMessage = (BlockRegistryMessage)message;
-            registries.getBlockLoader().setBlockRegistry(blockRegistryMessage.getBlockRegistry());
-            System.out.println(registries.getBlockLoader().getBlockRegistry().__repr__());
+            breaktome.getRegistries().getBlockLoader().setBlockRegistry(blockRegistryMessage.getBlockRegistry());
+            System.out.println(breaktome.getRegistries().getBlockLoader().getBlockRegistry().__repr__());
         }
     }
 }

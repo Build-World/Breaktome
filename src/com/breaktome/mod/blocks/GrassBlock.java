@@ -1,8 +1,8 @@
 package com.breaktome.mod.blocks;
 
-import com.breaktome.game.blocks.Block;
+import com.breaktome.game.blocks.shapes.CubeBlock;
 
-public class GrassBlock extends Block {
+public class GrassBlock extends CubeBlock {
 
     @Override
     public String getDescription() {
@@ -22,5 +22,10 @@ public class GrassBlock extends Block {
     @Override
     public String getNamespace() {
         return "breaktome";
+    }
+
+    @Override
+    public String getTexturePath() {
+        return "grass.png";
     }
 }
