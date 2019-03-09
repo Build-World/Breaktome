@@ -1,6 +1,7 @@
 package com.breaktome.game.mod;
 
 import com.breaktome.Breaktome;
+import com.jme3.asset.plugins.FileLocator;
 
 /**
  * Mod class which is used with JMonkey Game Engine
@@ -15,6 +16,11 @@ abstract public class BreaktomeMod implements IMod {
 
     public Breaktome getApp() {
         return app;
+    }
+
+    @Override
+    public void registerAssetLocator(String path) throws Exception {
+        app.getAssetManager().registerLocator(path, FileLocator.class);
     }
 
     @Override

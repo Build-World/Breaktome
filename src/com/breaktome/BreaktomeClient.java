@@ -21,7 +21,8 @@ public class BreaktomeClient extends Breaktome {
 
     @Override
     public void onBoot() throws Exception {
-        playerClient = new PlayerClient("127.0.0.1", 4242);
+        registerAssetLocator(assetsPath);
+        playerClient = new PlayerClient(this,"127.0.0.1", 4242);
         playerClient.start();
     }
 

@@ -7,4 +7,6 @@ public interface IClientMod {
     void onClientPlay() throws Exception;
     void onClientUpdate(float tpf) throws Exception;
 
+    void registerAssetLocator(String path) throws Exception;
+
 }

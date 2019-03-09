@@ -5,6 +5,7 @@ import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.Server;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class ServerSender {
@@ -42,8 +43,11 @@ public class ServerSender {
      */
     private Server server;
 
+    private Set<HostedConnection> clients;
+
     public ServerSender(Server server) {
         this.server = server;
+        clients = new HashSet<>();
     }
 
     public ServerSender broadcast(Message message)
@@ -79,7 +83,7 @@ public class ServerSender {
     /**
      * Set clients and forget
      */
-    private Set<HostedConnection> clients;
+
 
     public ServerSender addClient(HostedConnection connection)
     {

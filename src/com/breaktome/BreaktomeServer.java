@@ -17,7 +17,7 @@ public class BreaktomeServer extends Breaktome {
 
     @Override
     public void onBoot() throws Exception {
-        gameServer = new GameServer(4242);
+        gameServer = new GameServer(this,4242);
         gameServer.start();
     }
 

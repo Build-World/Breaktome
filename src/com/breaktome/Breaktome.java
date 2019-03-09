@@ -3,8 +3,29 @@ package com.breaktome;
 import com.breaktome.game.mod.BreaktomeModLoader;
 import com.breaktome.game.mod.BreaktomeModService;
 import com.breaktome.game.mod.IMod;
+import com.breaktome.game.network.messages.BlockRegistryMessage;
+import com.breaktome.game.network.messages.ChunkMessage;
+import com.breaktome.game.network.messages.PlayersMessage;
+import com.breaktome.game.registries.Registries;
+import com.breaktome.mod.blocks.BlankBlock;
+import com.breaktome.mod.blocks.GrassBlock;
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.plugins.FileLocator;
+import com.jme3.network.serializing.Serializer;
 
+
+/**
+ *
+ * TODO: Implement event system with a global event listener registry
+ *   - add an interface for each event group: block, network, etc.
+ *   - ensure that event listeners can have a priority set to them
+ *   - everytime an event listener is registered by the mod loader, resort listeners into separate sorted lists by event group type
+ *   - have one array list for network listeners, one for block listeners etc.
+ *   - trigger events on playermessage, blockregistrymessage, onConnection, onDisconnection
+ *   - an event listener can be multiple types, just implement multiple event group type interfaces
+ *   - Create an interface for all event types
+ *
+ */
 abstract public class Breaktome extends SimpleApplication implements IMod {
     /** Changeable parameters */
     public static String basePath = "D:\\Programming\\Projects\\Build-World";
@@ -20,6 +41,7 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
     private String description = "Breaktome is a game framework";
 
     private BreaktomeModLoader modLoader;
+    private Registries registries;
 
     abstract boolean isServer();
 
@@ -39,6 +61,18 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
         Breaktome.assetsPath = assetsPath;
     }
 
+    public static String getBasePath() {
+        return basePath;
+    }
+
+    public static String getModsPath() {
+        return modsPath;
+    }
+
+    public static String getAssetsPath() {
+        return assetsPath;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -51,8 +85,22 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
         this.description = description;
     }
 
+    public Registries getRegistries() {
+        return registries;
+    }
+
+    public void registerSerializers() {
+        Serializer.registerClass(PlayersMessage.class);
+        Serializer.registerClass(BlockRegistryMessage.class);
+        Serializer.registerClass(ChunkMessage.class);
+    }
+
     @Override
     public void simpleInitApp() {
+
+        registerSerializers();
+
+        registries = new Registries();
 
         new BreaktomeModService();
 
@@ -110,6 +158,10 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
 
     @Override
     public void onLoad() throws Exception {
+
+        registries.getBlockLoader().register(new BlankBlock());
+        registries.getBlockLoader().register(new GrassBlock());
+
         if(isRunningOnClient())
         {
             onClientLoad();
@@ -146,6 +198,11 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
         } else {
             onServerUpdate(tpf);
         }
+    }
+
+    @Override
+    public void registerAssetLocator(String path) throws Exception {
+        assetManager.registerLocator(path, FileLocator.class);
     }
 
     @Override
