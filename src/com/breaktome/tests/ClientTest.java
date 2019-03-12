@@ -6,6 +6,7 @@ public class ClientTest {
     public static void main(String[] args)
     {
         BreaktomeClient breaktomeClient = new BreaktomeClient();
+//        breaktomeClient.setShowSettings(false);
         breaktomeClient.start();
     }
 }

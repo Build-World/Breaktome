@@ -6,9 +6,8 @@ import com.breaktome.game.mod.IMod;
 import com.breaktome.game.network.messages.BlockRegistryMessage;
 import com.breaktome.game.network.messages.ChunkMessage;
 import com.breaktome.game.network.messages.PlayersMessage;
-import com.breaktome.game.registries.Registries;
-import com.breaktome.mod.blocks.BlankBlock;
-import com.breaktome.mod.blocks.GrassBlock;
+import com.breaktome.game.states.BreaktomeState;
+import com.breaktome.game.states.GlobalState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.network.serializing.Serializer;
@@ -40,8 +39,11 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
     private String key = "breaktome";
     private String description = "Breaktome is a game framework";
 
+    /** Modloader */
     private BreaktomeModLoader modLoader;
-    private Registries registries;
+
+    /** Application States */
+    private GlobalState globalState;
 
     abstract boolean isServer();
 
@@ -85,8 +87,8 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
         this.description = description;
     }
 
-    public Registries getRegistries() {
-        return registries;
+    public GlobalState getGlobalState() {
+        return globalState;
     }
 
     public void registerSerializers() {
@@ -100,7 +102,8 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
 
         registerSerializers();
 
-        registries = new Registries();
+        globalState = new GlobalState();
+        registerAppState(globalState);
 
         new BreaktomeModService();
 
@@ -150,7 +153,6 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
         }
     }
 
-
     @Override
     public void destroy() {
         super.destroy();
@@ -158,9 +160,8 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
 
     @Override
     public void onLoad() throws Exception {
-
-        registries.getBlockLoader().register(new BlankBlock());
-        registries.getBlockLoader().register(new GrassBlock());
+        globalState.load();
+        globalState.setEnabled(true);
 
         if(isRunningOnClient())
         {
@@ -203,6 +204,11 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
     @Override
     public void registerAssetLocator(String path) throws Exception {
         assetManager.registerLocator(path, FileLocator.class);
+    }
+
+    public void registerAppState(BreaktomeState appState)
+    {
+        stateManager.attach(appState);
     }
 
     @Override

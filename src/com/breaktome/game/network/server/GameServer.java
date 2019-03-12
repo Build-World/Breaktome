@@ -2,12 +2,9 @@ package com.breaktome.game.network.server;
 
 import com.breaktome.Breaktome;
 import com.breaktome.game.network.INetworkNode;
-import com.breaktome.game.network.messages.BlockRegistryMessage;
-import com.breaktome.game.network.messages.PlayersMessage;
 import com.breaktome.game.network.server.listeners.ConnectionListener;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
-import com.jme3.network.serializing.Serializer;
 
 import java.io.IOException;
 
@@ -39,7 +36,7 @@ public class GameServer implements INetworkNode {
     public void start() {
         try {
             server = Network.createServer(port);
-            server.addConnectionListener(new ConnectionListener(app.getRegistries()));
+            server.addConnectionListener(new ConnectionListener(app.getGlobalState().getRegistries()));
             server.start();
         } catch (IOException e) {
             e.printStackTrace();

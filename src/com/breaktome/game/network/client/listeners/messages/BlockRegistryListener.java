@@ -19,8 +19,8 @@ public class BlockRegistryListener implements MessageListener<Client> {
         if(message instanceof BlockRegistryMessage)
         {
             BlockRegistryMessage blockRegistryMessage = (BlockRegistryMessage)message;
-            breaktome.getRegistries().getBlockLoader().setBlockRegistry(blockRegistryMessage.getBlockRegistry());
-            System.out.println(breaktome.getRegistries().getBlockLoader().getBlockRegistry().__repr__());
+            breaktome.getGlobalState().getRegistries().getBlockLoader().setBlockRegistry(blockRegistryMessage.getBlockRegistry());
+            System.out.println(breaktome.getGlobalState().getRegistries().getBlockLoader().getBlockRegistry().__repr__());
         }
     }
 }
