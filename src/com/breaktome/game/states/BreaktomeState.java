@@ -1,6 +1,7 @@
 package com.breaktome.game.states;
 
 import com.breaktome.Breaktome;
+import com.breaktome.mod.states.GlobalState;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;

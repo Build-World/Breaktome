@@ -1,16 +1,24 @@
 package com.breaktome;
 
-import com.breaktome.game.mod.BreaktomeModLoader;
-import com.breaktome.game.mod.BreaktomeModService;
-import com.breaktome.game.mod.IMod;
-import com.breaktome.game.network.messages.BlockRegistryMessage;
-import com.breaktome.game.network.messages.ChunkMessage;
-import com.breaktome.game.network.messages.PlayersMessage;
+import com.breaktome.game.events.IEventListener;
+import com.breaktome.game.modding.BreaktomeModLoader;
+import com.breaktome.game.modding.BreaktomeModService;
+import com.breaktome.game.modding.IMod;
+import com.breaktome.game.network.client.IClientMessageListener;
+import com.breaktome.game.network.server.IServerMessageListener;
+import com.breaktome.game.registries.IRegistry;
+import com.breaktome.mod.network.messages.BlockRegistryMessage;
+import com.breaktome.mod.network.messages.ChunkMessage;
+import com.breaktome.mod.network.messages.PlayersMessage;
 import com.breaktome.game.states.BreaktomeState;
-import com.breaktome.game.states.GlobalState;
+import com.breaktome.mod.states.GlobalState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.FileLocator;
+import com.jme3.network.*;
 import com.jme3.network.serializing.Serializer;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -40,7 +48,7 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
     private String description = "Breaktome is a game framework";
 
     /** Modloader */
-    private BreaktomeModLoader modLoader;
+    protected BreaktomeModLoader modLoader;
 
     /** Application States */
     private GlobalState globalState;
@@ -99,15 +107,16 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
 
     @Override
     public void simpleInitApp() {
-
         registerSerializers();
 
         globalState = new GlobalState();
         registerAppState(globalState);
 
         new BreaktomeModService();
-
         modLoader = new BreaktomeModLoader(this, Breaktome.modsPath);
+
+        registerModRegistries();
+        registerModEvents();
 
         try {
             onBoot();
@@ -212,6 +221,40 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
     }
 
     @Override
+    public Set<IRegistry> registerRegistries() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public Set<IEventListener> registerEvents() {
+        return new HashSet<>();
+    }
+
+    public void registerModRegistries() {
+        for(IRegistry registry : registerRegistries())
+        {
+            globalState.getRegistries().registerRegistry(registry);
+        }
+
+        for(IRegistry registry : modLoader.registerRegistries())
+        {
+            globalState.getRegistries().registerRegistry(registry);
+        }
+    }
+
+    public void registerModEvents() {
+        for(IEventListener listener : registerEvents())
+        {
+            globalState.getEvents().registerListener(listener);
+        }
+
+        for(IEventListener listener : modLoader.registerEvents())
+        {
+            globalState.getEvents().registerListener(listener);
+        }
+    }
+
+    @Override
     public void onEnable() throws Exception {
 
     }
@@ -290,4 +333,26 @@ abstract public class Breaktome extends SimpleApplication implements IMod {
     public void onServerUpdate(float tpf) throws Exception {
 
     }
+
+    @Override
+    public Set<IClientMessageListener> registerClientMessageListeners() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public Set<ClientStateListener> registerClientStateListeners() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public Set<ConnectionListener> registerConnectionListeners() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public Set<IServerMessageListener> registerServerMessageListeners() {
+        return new HashSet<>();
+    }
+
+
 }

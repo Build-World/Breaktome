@@ -1,6 +1,5 @@
 package com.breaktome.game.network.server;
 
-import com.breaktome.game.network.server.states.IConnectionState;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Server;
 
